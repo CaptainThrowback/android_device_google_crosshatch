@@ -1,0 +1,6 @@
+service vendor.small_hals /system/bin/small_hals.crosshatch-service
+    disabled
+    user root
+    group root
+    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
+    seclabel u:r:recovery:s0

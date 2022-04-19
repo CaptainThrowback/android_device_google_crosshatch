@@ -1,0 +1,47 @@
+import /init.recovery.qcom_decrypt.rc
+
+on early-init
+    mount_all /vendor/etc/fstab.persist --early
+
+on init
+    # This allows the ledtrig-transient properties to be created here so
+    # that they can be chown'd to system:system later on boot
+    write /sys/class/leds/vibrator/trigger "transient"
+
+on boot
+    start health-hal-2-0
+
+    # Permission for Vibrator
+    chown system system /sys/class/leds/vibrator/trigger
+    chown system system /sys/class/leds/vibrator/activate
+    chown system system /sys/class/leds/vibrator/brightness
+    chown system system /sys/class/leds/vibrator/duration
+    chown system system /sys/class/leds/vibrator/state
+    chown system system /sys/class/timed_output/vibrator/enable
+
+    chown system system /sys/class/leds/vibrator/device/comp_enable
+    chown system system /sys/class/leds/vibrator/device/cp_dig_scale
+    chown system system /sys/class/leds/vibrator/device/cp_trigger_index
+    chown system system /sys/class/leds/vibrator/device/cp_trigger_queue
+    chown system system /sys/class/leds/vibrator/device/dig_scale
+    chown system system /sys/class/leds/vibrator/device/f0_stored
+    chown system system /sys/class/leds/vibrator/device/heartbeat
+    chown system system /sys/class/leds/vibrator/device/num_waves
+    chown system system /sys/class/leds/vibrator/device/redc_stored
+    chown system system /sys/class/leds/vibrator/device/standby_timeout
+
+    start vendor.small_hals
+
+on post-fs
+    start boot-hal-1-0
+
+on post-fs-data
+    # Set up sensors-related directories and permissions
+    chmod 770 /persist/haptics
+    chmod 440 /persist/haptics/cs40l20.cal
+    chown system system /persist/haptics
+    chown system system /persist/haptics/cs40l20.cal
+
+on property:twrp.apex.loaded=true
+   export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/apex/com.android.runtime/lib64:/apex/com.google.android.media.swcodec/lib64:/apex/com.android.media.swcodec/lib64:/apex/com.android.media.swcodec/lib64/:/apex/com.android.runtime/lib64/:/apex/com.android.art.release/lib64:/apex/com.android.art/lib64/:/apex/com.android.os.statsd/lib64:/apex/com.android.art/lib64
+
