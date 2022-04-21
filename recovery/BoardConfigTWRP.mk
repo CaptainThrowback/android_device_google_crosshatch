@@ -29,12 +29,20 @@ DISABLE_ARTIFACT_PATH_REQUIREMENTS := true
 
 # Recovery
 TARGET_RECOVERY_DEVICE_MODULES += \
+    android.hardware.vibrator@1.0 \
+    android.hardware.vibrator@1.1 \
+    android.hardware.vibrator@1.2 \
+    android.hardware.vibrator@1.2-impl.crosshatch \
     libion \
     vibrator.crosshatch-service
 RECOVERY_BINARY_SOURCE_FILES += \
     $(TARGET_OUT_VENDOR_EXECUTABLES)/hw/vibrator.crosshatch-service
 RECOVERY_LIBRARY_SOURCE_FILES += \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libion.so
+    $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
+    $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/android.hardware.vibrator@1.0.so \
+    $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/android.hardware.vibrator@1.1.so \
+    $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/android.hardware.vibrator@1.2.so \
+    $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/hw/android.hardware.vibrator@1.2-impl.crosshatch.so
 
 # TWRP Standard Flags
 TW_THEME := portrait_hdpi

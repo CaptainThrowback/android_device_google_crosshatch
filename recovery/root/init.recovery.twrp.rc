@@ -1,8 +1,5 @@
 import /init.recovery.qcom_decrypt.rc
 
-on early-init
-    mount_all /vendor/etc/fstab.persist --early
-
 on init
     # This allows the ledtrig-transient properties to be created here so
     # that they can be chown'd to system:system later on boot
@@ -34,13 +31,6 @@ on boot
 
 on post-fs
     start boot-hal-1-0
-
-on post-fs-data
-    # Set up sensors-related directories and permissions
-    chmod 770 /persist/haptics
-    chmod 440 /persist/haptics/cs40l20.cal
-    chown system system /persist/haptics
-    chown system system /persist/haptics/cs40l20.cal
 
 on property:twrp.apex.loaded=true
    export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/apex/com.android.runtime/lib64:/apex/com.google.android.media.swcodec/lib64:/apex/com.android.media.swcodec/lib64:/apex/com.android.media.swcodec/lib64/:/apex/com.android.runtime/lib64/:/apex/com.android.art.release/lib64:/apex/com.android.art/lib64/:/apex/com.android.os.statsd/lib64:/apex/com.android.art/lib64
