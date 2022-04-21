@@ -29,10 +29,11 @@ DISABLE_ARTIFACT_PATH_REQUIREMENTS := true
 
 # Recovery
 TARGET_RECOVERY_DEVICE_MODULES += \
-    android.hardware.memtrack@1.0 \
-    libion
+    libion \
+    vibrator.crosshatch-service
+RECOVERY_BINARY_SOURCE_FILES += \
+    $(TARGET_OUT_VENDOR_EXECUTABLES)/hw/vibrator.crosshatch-service
 RECOVERY_LIBRARY_SOURCE_FILES += \
-    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.memtrack@1.0.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so
 
 # TWRP Standard Flags

@@ -1,4 +1,4 @@
-service vendor.small_hals /system/bin/small_hals.crosshatch-service
+service vendor.vibrator /system/bin/vibrator.crosshatch-service
     disabled
     user root
     group root

@@ -14,6 +14,10 @@
 // limitations under the License.
 //
 
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
 cc_library_static {
     name: "librecovery_ui_crosshatch",
     owner: "google",
@@ -56,5 +60,25 @@ cc_library_static {
         "libbase",
         "libnos_for_recovery",
         "libnos_citadel_for_recovery",
+    ],
+}
+
+cc_binary {
+    name: "vibrator.crosshatch-service",
+    defaults: ["hidl_defaults"],
+    relative_install_path: "hw",
+    proprietary: true,
+    init_rc: ["vibrator/vibrator.crosshatch-service.rc"],
+    vintf_fragments: ["vibrator/vibrator.crosshatch-service.xml"],
+    srcs: ["vibrator/service.cpp"],
+
+    shared_libs: [
+        "android.hardware.vibrator@1.0",
+        "android.hardware.vibrator@1.1",
+        "android.hardware.vibrator@1.2",
+        "libbase",
+        "libhidlbase",
+        "liblog",
+        "libutils",
     ],
 }

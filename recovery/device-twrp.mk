@@ -15,6 +15,11 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/vibrator/cs40l20/cs40l20.wmfw:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/firmware/cs40l20.wmfw \
     $(DEVICE_PATH)/vibrator/cs40l20/cs40l20.bin:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/firmware/cs40l20.bin
 
+# Vibrator Service & Manifest
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/recovery/vibrator/vibrator.crosshatch-service.rc:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/etc/init/vibrator.crosshatch-service.rc \
+    $(DEVICE_PATH)/recovery/vibrator/vibrator.crosshatch-service.xml:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/etc/vintf/manifest/vibrator.crosshatch-service.xml
+
 # ueventd
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/ueventd.hardware.rc:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/ueventd.rc

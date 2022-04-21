@@ -30,7 +30,7 @@ on boot
     chown system system /sys/class/leds/vibrator/device/redc_stored
     chown system system /sys/class/leds/vibrator/device/standby_timeout
 
-    start vendor.small_hals
+    start vendor.vibrator
 
 on post-fs
     start boot-hal-1-0
