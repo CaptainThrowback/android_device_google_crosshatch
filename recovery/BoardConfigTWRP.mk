@@ -63,8 +63,6 @@ TW_OVERRIDE_SYSTEM_PROPS := \
     "ro.build.date.utc;ro.bootimage.build.date.utc=ro.build.date.utc;ro.odm.build.date.utc=ro.build.date.utc;ro.product.build.date.utc=ro.build.date.utc;ro.system.build.date.utc=ro.build.date.utc;ro.system_ext.build.date.utc=ro.build.date.utc;ro.vendor.build.date.utc=ro.build.date.utc;ro.build.product;ro.build.fingerprint=ro.system.build.fingerprint;ro.build.version.incremental;ro.product.name=ro.product.system.name"
 TW_LOAD_VENDOR_MODULES := "videobuf2-memops.ko videobuf2-vmalloc.ko heatmap.ko ftm5.ko sec_touch.ko"
 TW_USE_FSCRYPT_POLICY := 1
-USE_RECOVERY_INSTALLER := true
-RECOVERY_INSTALLER_PATH := bootable/recovery/installer
 
 # TWRP Debug Flags
 #TWRP_EVENT_LOGGING := true
@@ -76,3 +74,31 @@ TARGET_RECOVERY_DEVICE_MODULES += strace
 RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/strace
 #TARGET_RECOVERY_DEVICE_MODULES += twrpdec
 #TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/twrpdec
+
+#
+# For local builds only
+#
+# TWRP zip installer
+# See https://gerrit.twrp.me/c/android_build/+/5445 for details
+ifneq ($(wildcard bootable/recovery/installer/.),)
+    USE_RECOVERY_INSTALLER := true
+    RECOVERY_INSTALLER_PATH := bootable/recovery/installer
+endif
+
+# Custom TWRP Versioning
+# See https://github.com/minimal-manifest-twrp/android_device_common_version-info for details
+ifneq ($(wildcard device/common/version-info/.),)
+    # device version is optional - the default value is "0" if nothing is set in device tree
+    CUSTOM_TWRP_DEVICE_VERSION := 0
+    # version prefix is optional - the default value is "LOCAL" if nothing is set in device tree
+    CUSTOM_TWRP_VERSION_PREFIX := CPTB
+
+    include device/common/version-info/custom_twrp_version.mk
+
+    ifeq ($(CUSTOM_TWRP_VERSION),)
+        CUSTOM_TWRP_VERSION := $(shell date +%Y%m%d)-01
+    endif
+endif
+#
+# end local build flags
+#
