@@ -15,6 +15,7 @@
 #
 
 include build/make/target/board/BoardConfigMainlineCommon.mk
+include build/make/target/board/BoardConfigPixelCommon.mk
 
 TARGET_BOARD_PLATFORM := sdm845
 TARGET_BOARD_INFO_FILE := device/google/crosshatch/board-info.txt
@@ -67,10 +68,15 @@ BOARD_USES_METADATA_PARTITION := true
 AB_OTA_UPDATER := true
 
 AB_OTA_PARTITIONS += \
-    boot \
     system \
-    vbmeta \
     dtbo
+
+ifneq ($(PRODUCT_BUILD_BOOT_IMAGE),false)
+AB_OTA_PARTITIONS += boot
+endif
+ifneq ($(PRODUCT_BUILD_VBMETA_IMAGE),false)
+AB_OTA_PARTITIONS += vbmeta
+endif
 
 # Skip product and system_ext partition for nodap build
 ifeq ($(filter %_nodap,$(TARGET_PRODUCT)),)
@@ -86,18 +92,13 @@ endif
 
 # Partitions (listed in the file) to be wiped under recovery.
 TARGET_RECOVERY_WIPE := device/google/crosshatch/recovery.wipe
-#ifneq ($(filter %_mainline,$(TARGET_PRODUCT)),)
-#TARGET_RECOVERY_FSTAB := device/google/crosshatch/fstab.mainline.hardware
-#else
-#TARGET_RECOVERY_FSTAB := device/google/crosshatch/fstab.hardware
-#endif
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_RECOVERY_UI_LIB := \
     librecovery_ui_pixel \
     libfstab
 
 ifneq ($(filter %_mainline,$(TARGET_PRODUCT)),)
-BOARD_AVB_VBMETA_SYSTEM := system system_ext
+BOARD_AVB_VBMETA_SYSTEM := system system_ext product
 BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
 BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA2048
 BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
@@ -297,6 +298,10 @@ BOARD_VENDOR_KERNEL_MODULES += \
 else ifeq (,$(filter-out blueline_kernel_debug_memory crosshatch_kernel_debug_memory, $(TARGET_PRODUCT)))
 BOARD_VENDOR_KERNEL_MODULES += \
     $(wildcard device/google/crosshatch-kernel/debug_memory/*.ko)
+else ifeq (,$(filter-out blueline_kernel_debug_memory_accounting crosshatch_kernel_debug_memory_accounting, $(TARGET_PRODUCT)))
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(wildcard device/google/crosshatch-kernel/debug_memory_accounting/*.ko)
+BOARD_KERNEL_CMDLINE += page_owner=on
 else ifeq (,$(filter-out blueline_kernel_debug_locking crosshatch_kernel_debug_locking, $(TARGET_PRODUCT)))
 BOARD_VENDOR_KERNEL_MODULES += \
     $(wildcard device/google/crosshatch-kernel/debug_locking/*.ko)
@@ -327,6 +332,8 @@ ifeq (,$(filter-out blueline_kasan crosshatch_kasan, $(TARGET_PRODUCT)))
 BOARD_PREBUILT_DTBIMAGE_DIR := device/google/crosshatch-kernel/kasan
 else ifeq (,$(filter-out blueline_kernel_debug_memory crosshatch_kernel_debug_memory, $(TARGET_PRODUCT)))
 BOARD_PREBUILT_DTBIMAGE_DIR := device/google/crosshatch-kernel/debug_memory
+else ifeq (,$(filter-out blueline_kernel_debug_memory_accounting crosshatch_kernel_debug_memory_accounting, $(TARGET_PRODUCT)))
+BOARD_PREBUILT_DTBIMAGE_DIR := device/google/crosshatch-kernel/debug_memory_accounting
 else ifeq (,$(filter-out blueline_kernel_debug_locking crosshatch_kernel_debug_locking, $(TARGET_PRODUCT)))
 BOARD_PREBUILT_DTBIMAGE_DIR := device/google/crosshatch-kernel/debug_locking
 else ifeq (,$(filter-out blueline_kernel_debug_hang crosshatch_kernel_debug_hang, $(TARGET_PRODUCT)))

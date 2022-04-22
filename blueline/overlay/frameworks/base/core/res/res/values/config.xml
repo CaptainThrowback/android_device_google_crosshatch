@@ -689,6 +689,6 @@
         <item>G013B</item>
     </string-array>
 
-    <dimen name="rounded_corner_radius">70px</dimen>
-
+    <!-- the number of the max cached processes in the system. -->
+    <integer name="config_customizedMaxCachedProcesses">64</integer>
 </resources>
