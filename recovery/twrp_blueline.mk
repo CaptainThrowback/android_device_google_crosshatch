@@ -47,5 +47,8 @@ PRODUCT_BRAND := $(BOARD_VENDOR)
 PRODUCT_MODEL := Pixel 3
 PRODUCT_MANUFACTURER := $(PRODUCT_BRAND)
 
+# Common device folder
+DEVICE_PATH := device/$(PRODUCT_BRAND)/$(COMMON_FOLDER)
+
 # Inherit from hardware-specific part of the product configuration
-$(call inherit-product, device/$(PRODUCT_BRAND)/$(COMMON_FOLDER)/device-$(PRODUCT_DEVICE).mk)
+$(call inherit-product, $(DEVICE_PATH)/device-$(PRODUCT_DEVICE).mk)

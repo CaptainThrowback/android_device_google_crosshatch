@@ -1,7 +1,6 @@
-DEVICE_PATH := device/$(BOARD_VENDOR)/$(COMMON_FOLDER)
-
 # Inherit from common AOSP config
 $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 
 # Enable project quotas and casefolding for emulated storage without sdcardfs
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
@@ -11,18 +10,15 @@ PRODUCT_PACKAGES += \
     qcom_decrypt \
     qcom_decrypt_fbe
 
-# Apex libraries
-PRODUCT_COPY_FILES += \
-    $(OUT_DIR)/target/product/$(PRODUCT_RELEASE_NAME)/obj/SHARED_LIBRARIES/libandroidicu_intermediates/libandroidicu.so:$(TARGET_COPY_OUT_RECOVERY)/root/system/lib64/libandroidicu.so
-
-# DRV2624 Haptics Waveform
-PRODUCT_COPY_FILES += \
-    $(DEVICE_PATH)/vibrator/drv2624/drv2624.bin:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/firmware/drv2624.bin
-
 # CS40L20 Haptics Waveform & Firmware
-#PRODUCT_COPY_FILES += \
-#    $(DEVICE_PATH)/vibrator/cs40l20/cs40l20.wmfw:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/firmware/cs40l20.wmfw \
-#    $(DEVICE_PATH)/vibrator/cs40l20/cs40l20.bin:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/firmware/cs40l20.bin
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/vibrator/cs40l20/cs40l20.wmfw:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/firmware/cs40l20.wmfw \
+    $(DEVICE_PATH)/vibrator/cs40l20/cs40l20.bin:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/firmware/cs40l20.bin
+
+# Vibrator Service & Manifest
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/recovery/vibrator/vibrator.crosshatch-service.rc:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/etc/init/vibrator.crosshatch-service.rc \
+    $(DEVICE_PATH)/recovery/vibrator/vibrator.crosshatch-service.xml:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/etc/vintf/manifest/vibrator.crosshatch-service.xml
 
 # ueventd
 PRODUCT_COPY_FILES += \
@@ -30,7 +26,8 @@ PRODUCT_COPY_FILES += \
 
 # OEM otacerts
 PRODUCT_EXTRA_RECOVERY_KEYS += \
-    $(DEVICE_PATH)/recovery/security/$(BOARD_VENDOR)
+    $(DEVICE_PATH)/recovery/security/$(BOARD_VENDOR)1 \
+    $(DEVICE_PATH)/recovery/security/$(BOARD_VENDOR)2
 
 # Copy modules for depmod
 PRODUCT_COPY_FILES += \
